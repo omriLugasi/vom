@@ -82,7 +82,7 @@ export function observeOn(target?: any, propertyKey?: string | symbol, parameter
 
     const handler = {
         set(target, key, value) {
-            observer.notify(propertyKey , value);
+            observer.notify(propertyKey , key , value);
             return true;
         },
     };
@@ -112,10 +112,12 @@ export class VomObserver{
         })
     }
 
-    notify(propertyName:string , value:any):void{
+    notify(propertyName:string ,key, value:any):void{
         this.subscribers.map((item)=>{
             if(item.name === propertyName){
-                item.Fn.call({},value);
+                let returnValue = {};
+                returnValue[key] = value;
+                item.Fn.call({},returnValue);
             }
         })
     }
