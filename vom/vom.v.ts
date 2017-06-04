@@ -83,8 +83,12 @@ export function observeOn(target?: any, propertyKey?: string | symbol, parameter
     const handler = {
         set(target, key, value) {
             observer.notify(propertyKey , key , value);
+            target[key] = value;
             return true;
         },
+        get: function(target, property) {
+            return target[property];
+        }
     };
     target[propertyKey] = new Proxy({}, handler);
     target[propertyKey].$$$hash = undefined;
